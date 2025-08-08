@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Langu-ify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        :root {
+            --background: #0a0a0a;
+            --foreground: #ffffff;
+        }
+        
+        body {
+            color: var(--foreground);
+            background: var(--background);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="min-h-screen bg-gray-900 text-white p-4">
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Header -->
+            <header class="text-center">
+                <h1 class="text-3xl font-bold text-cyan-400">Langu-ify</h1>
+                <p class="text-gray-400 mt-2">Learn translation through a tight "Translate → Rate → Teach" loop</p>
+            </header>
+
+            <!-- Example Picker -->
+            <div class="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <select id="lessonSelect" class="px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:border-cyan-500">
+                    <option value="basic-greeting">How are you today?</option>
+                    <option value="food-question">What do you want to eat for lunch?</option>
+                    <option value="time-question">When do we leave for the airport?</option>
+                </select>
+                <button id="nextSentenceBtn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors">
+                    Next Example
+                </button>
+            </div>
+
+            <!-- Custom Lesson Section -->
+            <div class="bg-gray-800 rounded-lg p-4">
+                <button id="customToggleBtn" class="flex items-center space-x-2 text-cyan-400 hover:text-cyan-300 transition-colors">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    <span>Custom sentence</span>
+                </button>
+                
+                <div id="customLessonSection" class="mt-4 space-y-4 hidden">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">English:</label>
+                        <input id="customEnglish" type="text" placeholder="Enter English sentence" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Expected Spanish:</label>
+                        <input id="customSpanish" type="text" placeholder="Enter expected Spanish translation" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <button id="saveCustomBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded transition-colors">
+                        Save as Lesson
+                    </button>
+                </div>
+            </div>
+
+            <!-- Translation Result Card -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <!-- Top row: Your input | Target translation -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-400 mb-2">Your input</h3>
+                        <div id="userInputDisplay" class="p-3 bg-gray-700 rounded min-h-[60px] flex items-center">
+                            <span class="text-gray-500">Type your translation...</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-400 mb-2">Target translation</h3>
+                        <div id="targetDisplay" class="p-3 bg-gray-700 rounded min-h-[60px] flex items-center">
+                            <div class="flex items-center space-x-2 text-gray-500">
+                                <i data-lucide="eye-off" class="w-4 h-4"></i>
+                                <span>Score ≥ 80 to reveal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submission input + inline hints + Check Answer -->
+                <div class="space-y-4 mb-6">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <input id="userInput" type="text" placeholder="Type your Spanish translation..." class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-cyan-500">
+                        <button id="checkAnswerBtn" class="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg transition-colors">
+                            Check Answer
+                        </button>
+                    </div>
+                    
+                    <!-- Inline hints -->
+                    <div id="inlineHints" class="space-y-2 hidden"></div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="mb-6">
+                    <div class="flex space-x-1 bg-gray-700 rounded-lg p-1">
+                        <button class="tab-btn flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-cyan-600 text-white" data-tab="vocabulary">Vocabulary</button>
+                        <button class="tab-btn flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-gray-600" data-tab="structure">Structure</button>
+                        <button class="tab-btn flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-gray-600" data-tab="hints">Hints</button>
+                        <button class="tab-btn flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-gray-600" data-tab="examples">Examples</button>
+                    </div>
+                </div>
+
+                <!-- Tab content -->
+                <div id="tabContent" class="mb-6">
+                    <!-- Vocabulary tab content will be loaded here -->
+                </div>
+
+                <!-- Performance bar + numeric score -->
+                <div id="performanceSection" class="mb-6 hidden">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium">Your Performance</span>
+                        <span id="scoreDisplay" class="text-2xl font-bold text-cyan-400">0</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-3">
+                        <div id="scoreBar" class="bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Footer buttons -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button id="tryAgainBtn" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors">
+                        Try Again
+                    </button>
+                    <button id="nextSentenceBtn2" class="flex-1 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors">
+                        Next Sentence
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dev Test Panel -->
+            <div class="bg-gray-800 rounded-lg p-4">
+                <button id="devTestToggleBtn" class="flex items-center space-x-2 text-cyan-400 hover:text-cyan-300 transition-colors">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    <span>Dev Test Panel</span>
+                </button>
+                
+                <div id="devTestResults" class="mt-4 space-y-2 hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
