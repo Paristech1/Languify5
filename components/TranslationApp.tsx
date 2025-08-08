@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, CheckCircle, Lock, Eye, EyeOff } from 'lucide-react';
 import { Lesson, ScoringResult } from '../lib/types';
 import { SAMPLE_LESSONS } from '../lib/constants';
-import { scoreTranslation, runDevTests } from '../lib/scoring';
+import { scoreTranslation, runDevTests as runScoringDevTests } from '../lib/scoring';
 
 type TabType = 'vocabulary' | 'structure' | 'hints' | 'examples';
 
@@ -95,8 +95,8 @@ export default function TranslationApp() {
     handleTryAgain();
   };
 
-  const runDevTests = () => {
-    const results = runDevTests();
+  const handleRunDevTests = () => {
+    const results = runScoringDevTests();
     setDevTestResults(results);
     setDevTestsOpen(true);
   };
@@ -374,7 +374,7 @@ export default function TranslationApp() {
           <button
             onClick={() => {
               if (!devTestsOpen) {
-                runDevTests();
+                handleRunDevTests();
               }
               setDevTestsOpen(!devTestsOpen);
             }}
