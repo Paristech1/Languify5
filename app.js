@@ -423,7 +423,7 @@ async function handleCustomLessonSave() {
 
     // Call our backend to create a lesson
     // Note: Replace 'your-netlify-app' with your actual Netlify app name
-    const response = await fetch('https://your-netlify-app.netlify.app/.netlify/functions/api/create-lesson', {
+    const response = await fetch('https://langu51.netlify.app/.netlify/functions/api/create-lesson', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ englishText: english })
