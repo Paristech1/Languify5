@@ -69,7 +69,7 @@ export function scoreTranslation(
   const limitedHints = hints.slice(0, HINTS_MAX);
 
   // Determine unlock states
-  const examplesUnlocked = score > SCORE_EXAMPLES_THRESHOLD;
+  const examplesUnlocked = score >= SCORE_EXAMPLES_THRESHOLD;
   const isAnswerRevealed = score >= SCORE_REVEAL_THRESHOLD;
 
   return {

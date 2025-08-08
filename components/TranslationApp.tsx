@@ -171,7 +171,7 @@ export default function TranslationApp() {
             ) : (
               <div className="flex items-center space-x-2 text-gray-500 text-sm">
                 <Lock className="w-4 h-4" />
-                <span>Score {'>'} 60 unlocks examples. Score ≥ 80 reveals the target answer.</span>
+                <span>Score ≥ 50 unlocks examples. Score ≥ 80 reveals the target answer.</span>
               </div>
             )}
           </div>
@@ -257,25 +257,12 @@ export default function TranslationApp() {
 
         {/* Translation Result Card */}
         <div className="bg-gray-800 rounded-lg p-6">
-          {/* Top row: Your input | Target translation */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-2">Your input</h3>
-              <div className="p-3 bg-gray-700 rounded min-h-[60px] flex items-center">
-                {userInput || <span className="text-gray-500">Type your translation...</span>}
-              </div>
-            </div>
+          {/* Prompt being tested */}
+          <div className="grid grid-cols-1 gap-4 mb-6">
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-2">Target translation</h3>
               <div className="p-3 bg-gray-700 rounded min-h-[60px] flex items-center">
-                {isAnswerRevealed ? (
-                  <span className="text-green-400">{currentLesson.correctAnswer}</span>
-                ) : (
-                  <div className="flex items-center space-x-2 text-gray-500">
-                    <EyeOff className="w-4 h-4" />
-                    <span>Score ≥ 80 to reveal</span>
-                  </div>
-                )}
+                <span className="text-gray-200">{currentLesson.english}</span>
               </div>
             </div>
           </div>

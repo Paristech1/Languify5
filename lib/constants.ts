@@ -1,4 +1,4 @@
-export const SCORE_EXAMPLES_THRESHOLD = 61;  // >60
+export const SCORE_EXAMPLES_THRESHOLD = 50;  // ≥50
 export const SCORE_REVEAL_THRESHOLD = 80;    // >=80
 export const HINTS_MAX = 3;
 
