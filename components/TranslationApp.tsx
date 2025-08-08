@@ -171,7 +171,7 @@ export default function TranslationApp() {
             ) : (
               <div className="flex items-center space-x-2 text-gray-500 text-sm">
                 <Lock className="w-4 h-4" />
-                <span>Score > 60 unlocks examples. Score ≥ 80 reveals the target answer.</span>
+                <span>Score {'>'} 60 unlocks examples. Score ≥ 80 reveals the target answer.</span>
               </div>
             )}
           </div>
